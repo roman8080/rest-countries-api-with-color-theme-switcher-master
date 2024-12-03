@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Cars Application</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Manrope:wght@200..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s, color 0.3s;
+      }
+      body {
+        background-color: hsl(0, 0%, 100%);
+        color: hsl(0, 0%, 0%);
+        font-family: "Nunito Sans", sans-serif;
+      }
+      body.dark-mode {
+        background-color: hsl(207, 26%, 17%);
+        color: hsl(0, 0%, 100%);
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        padding: 2rem;
+      }
+      .main {
+        display: flex;
+        justify-content: space-between;
+        padding: 4rem;
+        gap: 1rem;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        border: 1px solid beige;
+      }
+      .card img {
+        height: 200px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .card {
+        background-color: hsl(0, 0%, 100%);
+        color: hsl(0, 0%, 0%);
+        border: 1px solid hsl(0, 0%, 85%);
+      }
+      .card.dark-mode {
+        background-color: hsl(209, 23%, 22%);
+        color: hsl(0, 0%, 100%);
+        border: 1px solid hsl(209, 23%, 32%);
+      }
+      button {
+        background-color: hsl(0, 0%, 100%);
+        color: hsl(0, 0%, 0%);
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+      input {
+        padding: 0.5rem;
+        border: 1px solid hsl(0, 0%, 85%);
+      }
+      select {
+        padding: 0.5rem;
+        border: 1px solid hsl(0, 0%, 85%);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Cars List</h1>
+      <button id="darkModeToggle">Dark Mode</button>
+    </header>
+    <main>
+      <div class="main">
+        <input id="search" type="text" placeholder="Search for a car..." />
+        <select id="filter">
+          <option value="">Select a Brand</option>
+          <option value="toyota">Toyota</option>
+          <option value="honda">Honda</option>
+          <option value="bmw">BMW</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
+      </div>
+    </main>
+    <div class="cards"></div>
+
+    <script>
+      const cards = document.querySelector(".cards");
+      const searchInput = document.getElementById("search");
+      const filterSelect = document.getElementById("filter");
+      const darkModeToggle = document.getElementById("darkModeToggle");
+
+      // Sample car data
+      let carsData = [
+        {
+          brand: "Toyota",
+          model: "Corolla",
+          year: 2022,
+          image: "https://via.placeholder.com/300x200?text=Toyota+Corolla",
+        },
+        {
+          brand: "Honda",
+          model: "Civic",
+          year: 2023,
+          image: "https://via.placeholder.com/300x200?text=Honda+Civic",
+        },
+        {
+          brand: "BMW",
+          model: "X5",
+          year: 2021,
+          image: "https://via.placeholder.com/300x200?text=BMW+X5",
+        },
+        {
+          brand: "Mercedes",
+          model: "C-Class",
+          year: 2022,
+          image: "https://via.placeholder.com/300x200?text=Mercedes+C-Class",
+        },
+        {
+          brand: "Audi",
+          model: "A4",
+          year: 2023,
+          image: "https://via.placeholder.com/300x200?text=Audi+A4",
+        },
+      ];
+
+      // Render cards
+      function renderCards(data) {
+        cards.innerHTML = "";
+        data.forEach((car) => {
+          const card = document.createElement("div");
+          card.classList.add("card");
+          if (document.body.classList.contains("dark-mode")) {
+            card.classList.add("dark-mode");
+          }
+          card.innerHTML = `
+            <img src="${car.image}" alt="${car.model}" />
+            <h3>${car.brand} ${car.model}</h3>
+            <h5>Year: ${car.year}</h5>
+          `;
+          cards.appendChild(card);
+        });
+      }
+
+      // Filter and search
+      function filterAndSearch() {
+        const searchQuery = searchInput.value.toLowerCase();
+        const selectedBrand = filterSelect.value.toLowerCase();
+        const filteredData = carsData.filter(
+          (car) =>
+            car.brand.toLowerCase().includes(searchQuery) &&
+            (selectedBrand === "" || car.brand.toLowerCase() === selectedBrand)
+        );
+        renderCards(filteredData);
+      }
+
+      // Event listeners
+      filterSelect.addEventListener("change", filterAndSearch);
+      searchInput.addEventListener("input", filterAndSearch);
+
+      // Dark mode toggle
+      darkModeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const cards = document.querySelectorAll(".card");
+        cards.forEach((card) => {
+          card.classList.toggle("dark-mode");
+        });
+      });
+
+      // Initial render
+      renderCards(carsData);
+    </script>
+  </body>
+</html>
