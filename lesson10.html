@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="data">
+    <button onclick="generate()">generate</button>
+    <img src="" alt="" id="qrcode">
+    <script>
+        const input = document.getElementById('data');
+        const image = document.getElementById('qrcode');
+       
+        function generate() {
+            image.src = `https://api.apgy.in/qr/?data=${input.value}&size=200`
+        }
+
+    </script>
+</body>
+</html>
