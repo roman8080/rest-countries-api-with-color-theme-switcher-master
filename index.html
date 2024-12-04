@@ -80,7 +80,7 @@
     <main>
       <div class="main">
         <input id="search" type="text" placeholder="Search for a country..." />
-        <input id="searchp" type="number" min="0" max="1000000000" value="0" />
+        <input id="searchp" type="number" min="0" max="1000000000" placeholder="search by population" />
         <select id="filter">
           <option value="">Select a Region</option>
           <option value="africa">Africa</option>
@@ -156,7 +156,6 @@
 
       function filterAndSearchByPopulation() {
   const populationQuery = parseInt(searchPopInput.value);
-  document.getElementById("populationValue").textContent = populationQuery.toLocaleString();
   if (!isNaN(populationQuery)) {
     const filteredData = countriesData.filter(
       (country) => country.population <= populationQuery
