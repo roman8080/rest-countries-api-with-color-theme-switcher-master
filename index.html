@@ -70,7 +70,7 @@
         padding: 0.5rem;
         border: 1px solid hsl(0, 0%, 85%);
       }
-      div.main>*{
+      div.main > * {
         flex: 1;
       }
     </style>
@@ -83,7 +83,11 @@
     <main>
       <div class="main">
         <input id="search" type="text" placeholder="Search for a country..." />
-        <input id="searchp" type="number" min="0" max="1000000000" placeholder="search by population" />
+        <select id="sortPopulation">
+          <option value="">Sort by Population</option>
+          <option value="lowest">Lowest</option>
+          <option value="highest">Highest</option>
+        </select>
         <select id="filter">
           <option value="">Select a Region</option>
           <option value="africa">Africa</option>
@@ -99,12 +103,11 @@
     <script>
       const cards = document.querySelector(".cards");
       const searchInput = document.getElementById("search");
-      const searchPopInput = document.getElementById("searchp");
+      const sortPopulation = document.getElementById("sortPopulation");
       const filterSelect = document.getElementById("filter");
       const darkModeToggle = document.getElementById("darkModeToggle");
       let countriesData = [];
 
-      
       function fetchCountriesByRegion(region) {
         const api = `https://restcountries.com/v3.1/region/${region}`;
         fetch(api)
@@ -157,17 +160,15 @@
         renderCards(filteredData);
       }
 
-      function filterAndSearchByPopulation() {
-  const populationQuery = parseInt(searchPopInput.value);
-  if (!isNaN(populationQuery)) {
-    const filteredData = countriesData.filter(
-      (country) => country.population <= populationQuery
-    );
-    renderCards(filteredData);
-  } else {
-    renderCards(countriesData);
-  }
-}
+      function sortCountriesByPopulation(order) {
+        let sortedData = [...countriesData];
+        if (order === "lowest") {
+          sortedData.sort((a, b) => a.population - b.population);
+        } else if (order === "highest") {
+          sortedData.sort((a, b) => b.population - a.population);
+        }
+        renderCards(sortedData);
+      }
 
       filterSelect.addEventListener("change", () => {
         const region = filterSelect.value;
@@ -179,7 +180,9 @@
       });
 
       searchInput.addEventListener("input", filterAndSearchByName);
-      searchPopInput.addEventListener("input", filterAndSearchByPopulation);
+      sortPopulation.addEventListener("change", () => {
+        sortCountriesByPopulation(sortPopulation.value);
+      });
 
       darkModeToggle.addEventListener("click", () => {
         document.body.classList.toggle("dark-mode");
